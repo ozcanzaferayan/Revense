@@ -1,0 +1,12 @@
+category
+
+item (genel attribute'leri tutacak örn name gibi)
+item_phone 
+item_tv
+
+category_attribute
+
+category_attribute_group
+
+refCategoryAttribute
+OrderVal (En üstte görünsün mü) DetaylardaGörünsünMü
