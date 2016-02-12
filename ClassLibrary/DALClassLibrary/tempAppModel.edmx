@@ -1,0 +1,599 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="tempAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="refCategory" Type="int" Nullable="false" />
+          <Property Name="refTranslationName" Type="int" Nullable="false" />
+          <Property Name="refTranslationDescription" Type="int" Nullable="false" />
+          <Property Name="RecordTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CategoryAttribute">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="refCategory" Type="int" Nullable="false" />
+          <Property Name="refCategoryGroup" Type="int" Nullable="false" />
+          <Property Name="refInputType" Type="int" Nullable="false" />
+          <Property Name="refTranslationName" Type="int" Nullable="false" />
+          <Property Name="Order" Type="int" />
+          <Property Name="ShownInFilter" Type="bit" />
+          <Property Name="ShownInDetails" Type="bit" />
+        </EntityType>
+        <EntityType Name="CategoryGroup">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="refTranslationName" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="InputTypeEnum">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="refCategory" Type="int" Nullable="false" />
+          <Property Name="refTranslationName" Type="int" Nullable="false" />
+          <Property Name="refTranslationSlug" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Translation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="Turkish" Type="nvarchar" MaxLength="250" />
+          <Property Name="English" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <Association Name="FK_Category_refCategory">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="Category1" Type="Self.Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Category1">
+              <PropertyRef Name="refCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Category_Translation_Description">
+          <End Role="Translation" Type="Self.Translation" Multiplicity="1" />
+          <End Role="Category" Type="Self.Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Translation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Category">
+              <PropertyRef Name="refTranslationDescription" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Category_Translation_Name">
+          <End Role="Translation" Type="Self.Translation" Multiplicity="1" />
+          <End Role="Category" Type="Self.Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Translation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Category">
+              <PropertyRef Name="refTranslationName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategoryAttribute_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="CategoryAttribute" Type="Self.CategoryAttribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CategoryAttribute">
+              <PropertyRef Name="refCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategoryAttribute_CategoryGroup">
+          <End Role="CategoryGroup" Type="Self.CategoryGroup" Multiplicity="1" />
+          <End Role="CategoryAttribute" Type="Self.CategoryAttribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CategoryGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CategoryAttribute">
+              <PropertyRef Name="refCategoryGroup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategoryAttribute_InputTypeEnum">
+          <End Role="InputTypeEnum" Type="Self.InputTypeEnum" Multiplicity="1" />
+          <End Role="CategoryAttribute" Type="Self.CategoryAttribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InputTypeEnum">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CategoryAttribute">
+              <PropertyRef Name="refInputType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategoryAttribute_Translation">
+          <End Role="Translation" Type="Self.Translation" Multiplicity="1" />
+          <End Role="CategoryAttribute" Type="Self.CategoryAttribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Translation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CategoryAttribute">
+              <PropertyRef Name="refTranslationName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategoryGroup_Translation">
+          <End Role="Translation" Type="Self.Translation" Multiplicity="1" />
+          <End Role="CategoryGroup" Type="Self.CategoryGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Translation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CategoryGroup">
+              <PropertyRef Name="refTranslationName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Item_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="refCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Item_Translation">
+          <End Role="Translation" Type="Self.Translation" Multiplicity="1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Translation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="refTranslationName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Item_Translation2">
+          <End Role="Translation" Type="Self.Translation" Multiplicity="1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Translation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="refTranslationSlug" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="tempAppModelStoreContainer">
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CategoryAttribute" EntityType="Self.CategoryAttribute" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CategoryGroup" EntityType="Self.CategoryGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InputTypeEnum" EntityType="Self.InputTypeEnum" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Translation" EntityType="Self.Translation" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Category_refCategory" Association="Self.FK_Category_refCategory">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Category1" EntitySet="Category" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Category_Translation_Description" Association="Self.FK_Category_Translation_Description">
+            <End Role="Translation" EntitySet="Translation" />
+            <End Role="Category" EntitySet="Category" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Category_Translation_Name" Association="Self.FK_Category_Translation_Name">
+            <End Role="Translation" EntitySet="Translation" />
+            <End Role="Category" EntitySet="Category" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategoryAttribute_Category" Association="Self.FK_CategoryAttribute_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="CategoryAttribute" EntitySet="CategoryAttribute" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategoryAttribute_CategoryGroup" Association="Self.FK_CategoryAttribute_CategoryGroup">
+            <End Role="CategoryGroup" EntitySet="CategoryGroup" />
+            <End Role="CategoryAttribute" EntitySet="CategoryAttribute" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategoryAttribute_InputTypeEnum" Association="Self.FK_CategoryAttribute_InputTypeEnum">
+            <End Role="InputTypeEnum" EntitySet="InputTypeEnum" />
+            <End Role="CategoryAttribute" EntitySet="CategoryAttribute" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategoryAttribute_Translation" Association="Self.FK_CategoryAttribute_Translation">
+            <End Role="Translation" EntitySet="Translation" />
+            <End Role="CategoryAttribute" EntitySet="CategoryAttribute" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategoryGroup_Translation" Association="Self.FK_CategoryGroup_Translation">
+            <End Role="Translation" EntitySet="Translation" />
+            <End Role="CategoryGroup" EntitySet="CategoryGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Item_Category" Association="Self.FK_Item_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Item" EntitySet="Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Item_Translation" Association="Self.FK_Item_Translation">
+            <End Role="Translation" EntitySet="Translation" />
+            <End Role="Item" EntitySet="Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Item_Translation2" Association="Self.FK_Item_Translation2">
+            <End Role="Translation" EntitySet="Translation" />
+            <End Role="Item" EntitySet="Item" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="tempAppModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="tempAppEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categories" EntityType="tempAppModel.Category" />
+          <EntitySet Name="CategoryAttributes" EntityType="tempAppModel.CategoryAttribute" />
+          <EntitySet Name="CategoryGroups" EntityType="tempAppModel.CategoryGroup" />
+          <EntitySet Name="InputTypeEnums" EntityType="tempAppModel.InputTypeEnum" />
+          <EntitySet Name="Items" EntityType="tempAppModel.Item" />
+          <EntitySet Name="Translations" EntityType="tempAppModel.Translation" />
+          <AssociationSet Name="FK_Category_refCategory" Association="tempAppModel.FK_Category_refCategory">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Category1" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Category_Translation_Description" Association="tempAppModel.FK_Category_Translation_Description">
+            <End Role="Translation" EntitySet="Translations" />
+            <End Role="Category" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Category_Translation_Name" Association="tempAppModel.FK_Category_Translation_Name">
+            <End Role="Translation" EntitySet="Translations" />
+            <End Role="Category" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategoryAttribute_Category" Association="tempAppModel.FK_CategoryAttribute_Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="CategoryAttribute" EntitySet="CategoryAttributes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Item_Category" Association="tempAppModel.FK_Item_Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Item" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategoryAttribute_CategoryGroup" Association="tempAppModel.FK_CategoryAttribute_CategoryGroup">
+            <End Role="CategoryGroup" EntitySet="CategoryGroups" />
+            <End Role="CategoryAttribute" EntitySet="CategoryAttributes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategoryAttribute_InputTypeEnum" Association="tempAppModel.FK_CategoryAttribute_InputTypeEnum">
+            <End Role="InputTypeEnum" EntitySet="InputTypeEnums" />
+            <End Role="CategoryAttribute" EntitySet="CategoryAttributes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategoryAttribute_Translation" Association="tempAppModel.FK_CategoryAttribute_Translation">
+            <End Role="Translation" EntitySet="Translations" />
+            <End Role="CategoryAttribute" EntitySet="CategoryAttributes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategoryGroup_Translation" Association="tempAppModel.FK_CategoryGroup_Translation">
+            <End Role="Translation" EntitySet="Translations" />
+            <End Role="CategoryGroup" EntitySet="CategoryGroups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Item_Translation" Association="tempAppModel.FK_Item_Translation">
+            <End Role="Translation" EntitySet="Translations" />
+            <End Role="Item" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Item_Translation2" Association="tempAppModel.FK_Item_Translation2">
+            <End Role="Translation" EntitySet="Translations" />
+            <End Role="Item" EntitySet="Items" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="refCategory" Type="Int32" Nullable="false" />
+          <Property Name="refTranslationName" Type="Int32" Nullable="false" />
+          <Property Name="refTranslationDescription" Type="Int32" Nullable="false" />
+          <Property Name="RecordTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Categories" Relationship="tempAppModel.FK_Category_refCategory" FromRole="Category" ToRole="Category1" />
+          <NavigationProperty Name="ParentCategory" Relationship="tempAppModel.FK_Category_refCategory" FromRole="Category1" ToRole="Category" />
+          <NavigationProperty Name="Description" Relationship="tempAppModel.FK_Category_Translation_Description" FromRole="Category" ToRole="Translation" />
+          <NavigationProperty Name="Name" Relationship="tempAppModel.FK_Category_Translation_Name" FromRole="Category" ToRole="Translation" />
+          <NavigationProperty Name="Attributes" Relationship="tempAppModel.FK_CategoryAttribute_Category" FromRole="Category" ToRole="CategoryAttribute" />
+          <NavigationProperty Name="Items" Relationship="tempAppModel.FK_Item_Category" FromRole="Category" ToRole="Item" />
+        </EntityType>
+        <EntityType Name="CategoryAttribute">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="refCategory" Type="Int32" Nullable="false" />
+          <Property Name="refCategoryGroup" Type="Int32" Nullable="false" />
+          <Property Name="refInputType" Type="Int32" Nullable="false" />
+          <Property Name="refTranslationName" Type="Int32" Nullable="false" />
+          <Property Name="Order" Type="Int32" />
+          <Property Name="ShownInFilter" Type="Boolean" />
+          <Property Name="ShownInDetails" Type="Boolean" />
+          <NavigationProperty Name="Category" Relationship="tempAppModel.FK_CategoryAttribute_Category" FromRole="CategoryAttribute" ToRole="Category" />
+          <NavigationProperty Name="CategoryGroup" Relationship="tempAppModel.FK_CategoryAttribute_CategoryGroup" FromRole="CategoryAttribute" ToRole="CategoryGroup" />
+          <NavigationProperty Name="InputType" Relationship="tempAppModel.FK_CategoryAttribute_InputTypeEnum" FromRole="CategoryAttribute" ToRole="InputTypeEnum" />
+          <NavigationProperty Name="Translation" Relationship="tempAppModel.FK_CategoryAttribute_Translation" FromRole="CategoryAttribute" ToRole="Translation" />
+        </EntityType>
+        <EntityType Name="CategoryGroup">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="refTranslationName" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CategoryAttributes" Relationship="tempAppModel.FK_CategoryAttribute_CategoryGroup" FromRole="CategoryGroup" ToRole="CategoryAttribute" />
+          <NavigationProperty Name="Translation" Relationship="tempAppModel.FK_CategoryGroup_Translation" FromRole="CategoryGroup" ToRole="Translation" />
+        </EntityType>
+        <EntityType Name="InputTypeEnum">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CategoryAttributes" Relationship="tempAppModel.FK_CategoryAttribute_InputTypeEnum" FromRole="InputTypeEnum" ToRole="CategoryAttribute" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="refCategory" Type="Int32" Nullable="false" />
+          <Property Name="refTranslationName" Type="Int32" Nullable="false" />
+          <Property Name="refTranslationSlug" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="tempAppModel.FK_Item_Category" FromRole="Item" ToRole="Category" />
+          <NavigationProperty Name="Name" Relationship="tempAppModel.FK_Item_Translation" FromRole="Item" ToRole="Translation" />
+          <NavigationProperty Name="Slug" Relationship="tempAppModel.FK_Item_Translation2" FromRole="Item" ToRole="Translation" />
+        </EntityType>
+        <EntityType Name="Translation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="Turkish" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="English" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CategoryDescriptions" Relationship="tempAppModel.FK_Category_Translation_Description" FromRole="Translation" ToRole="Category" />
+          <NavigationProperty Name="CategoryNames" Relationship="tempAppModel.FK_Category_Translation_Name" FromRole="Translation" ToRole="Category" />
+          <NavigationProperty Name="CategoryAttributes" Relationship="tempAppModel.FK_CategoryAttribute_Translation" FromRole="Translation" ToRole="CategoryAttribute" />
+          <NavigationProperty Name="CategoryGroups" Relationship="tempAppModel.FK_CategoryGroup_Translation" FromRole="Translation" ToRole="CategoryGroup" />
+          <NavigationProperty Name="ItemTranslations" Relationship="tempAppModel.FK_Item_Translation" FromRole="Translation" ToRole="Item" />
+          <NavigationProperty Name="ItemSlugs" Relationship="tempAppModel.FK_Item_Translation2" FromRole="Translation" ToRole="Item" />
+        </EntityType>
+        <Association Name="FK_Category_refCategory">
+          <End Type="tempAppModel.Category" Role="Category" Multiplicity="1" />
+          <End Type="tempAppModel.Category" Role="Category1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Category1">
+              <PropertyRef Name="refCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Category_Translation_Description">
+          <End Type="tempAppModel.Translation" Role="Translation" Multiplicity="1" />
+          <End Type="tempAppModel.Category" Role="Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Translation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Category">
+              <PropertyRef Name="refTranslationDescription" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Category_Translation_Name">
+          <End Type="tempAppModel.Translation" Role="Translation" Multiplicity="1" />
+          <End Type="tempAppModel.Category" Role="Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Translation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Category">
+              <PropertyRef Name="refTranslationName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategoryAttribute_Category">
+          <End Type="tempAppModel.Category" Role="Category" Multiplicity="1" />
+          <End Type="tempAppModel.CategoryAttribute" Role="CategoryAttribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CategoryAttribute">
+              <PropertyRef Name="refCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Item_Category">
+          <End Type="tempAppModel.Category" Role="Category" Multiplicity="1" />
+          <End Type="tempAppModel.Item" Role="Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="refCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategoryAttribute_CategoryGroup">
+          <End Type="tempAppModel.CategoryGroup" Role="CategoryGroup" Multiplicity="1" />
+          <End Type="tempAppModel.CategoryAttribute" Role="CategoryAttribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CategoryGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CategoryAttribute">
+              <PropertyRef Name="refCategoryGroup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategoryAttribute_InputTypeEnum">
+          <End Type="tempAppModel.InputTypeEnum" Role="InputTypeEnum" Multiplicity="1" />
+          <End Type="tempAppModel.CategoryAttribute" Role="CategoryAttribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InputTypeEnum">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CategoryAttribute">
+              <PropertyRef Name="refInputType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategoryAttribute_Translation">
+          <End Type="tempAppModel.Translation" Role="Translation" Multiplicity="1" />
+          <End Type="tempAppModel.CategoryAttribute" Role="CategoryAttribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Translation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CategoryAttribute">
+              <PropertyRef Name="refTranslationName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategoryGroup_Translation">
+          <End Type="tempAppModel.Translation" Role="Translation" Multiplicity="1" />
+          <End Type="tempAppModel.CategoryGroup" Role="CategoryGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Translation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CategoryGroup">
+              <PropertyRef Name="refTranslationName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Item_Translation">
+          <End Type="tempAppModel.Translation" Role="Translation" Multiplicity="1" />
+          <End Type="tempAppModel.Item" Role="Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Translation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="refTranslationName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Item_Translation2">
+          <End Type="tempAppModel.Translation" Role="Translation" Multiplicity="1" />
+          <End Type="tempAppModel.Item" Role="Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Translation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="refTranslationSlug" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="tempAppModelStoreContainer" CdmEntityContainer="tempAppEntities">
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="tempAppModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="RecordTime" ColumnName="RecordTime" />
+                <ScalarProperty Name="refTranslationDescription" ColumnName="refTranslationDescription" />
+                <ScalarProperty Name="refTranslationName" ColumnName="refTranslationName" />
+                <ScalarProperty Name="refCategory" ColumnName="refCategory" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CategoryAttributes">
+            <EntityTypeMapping TypeName="tempAppModel.CategoryAttribute">
+              <MappingFragment StoreEntitySet="CategoryAttribute">
+                <ScalarProperty Name="ShownInDetails" ColumnName="ShownInDetails" />
+                <ScalarProperty Name="ShownInFilter" ColumnName="ShownInFilter" />
+                <ScalarProperty Name="Order" ColumnName="Order" />
+                <ScalarProperty Name="refTranslationName" ColumnName="refTranslationName" />
+                <ScalarProperty Name="refInputType" ColumnName="refInputType" />
+                <ScalarProperty Name="refCategoryGroup" ColumnName="refCategoryGroup" />
+                <ScalarProperty Name="refCategory" ColumnName="refCategory" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CategoryGroups">
+            <EntityTypeMapping TypeName="tempAppModel.CategoryGroup">
+              <MappingFragment StoreEntitySet="CategoryGroup">
+                <ScalarProperty Name="refTranslationName" ColumnName="refTranslationName" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InputTypeEnums">
+            <EntityTypeMapping TypeName="tempAppModel.InputTypeEnum">
+              <MappingFragment StoreEntitySet="InputTypeEnum">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Items">
+            <EntityTypeMapping TypeName="tempAppModel.Item">
+              <MappingFragment StoreEntitySet="Item">
+                <ScalarProperty Name="refTranslationSlug" ColumnName="refTranslationSlug" />
+                <ScalarProperty Name="refTranslationName" ColumnName="refTranslationName" />
+                <ScalarProperty Name="refCategory" ColumnName="refCategory" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Translations">
+            <EntityTypeMapping TypeName="tempAppModel.Translation">
+              <MappingFragment StoreEntitySet="Translation">
+                <ScalarProperty Name="English" ColumnName="English" />
+                <ScalarProperty Name="Turkish" ColumnName="Turkish" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
