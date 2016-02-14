@@ -4,6 +4,10 @@
     <h2>Tüm Kategoriler</h2>
 
     @foreach($categories as $category)
-    <div>{{ $category->nameTranslation->trValue }}</div>
+        <ul class="contentList">
+            <li>
+                <span class="contentName">{{ $category->nameTranslation->trValue }}</span>
+            </li>
+        </ul>
     @endforeach
 @endsection

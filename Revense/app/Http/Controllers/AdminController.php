@@ -56,4 +56,11 @@ class AdminController extends Controller
         
         return View::make('admin.categories.index')->with('categories', $categories);
     }
+    
+    public function get_addCategory()
+    {
+        $categories = Category::all();
+        
+        return View::make('admin.categories.add')->with('categories', $categories);
+    }
 }

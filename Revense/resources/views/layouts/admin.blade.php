@@ -17,7 +17,7 @@
                         {{ Html::linkAction('AdminController@get_categories', 'Tüm Kategoriler') }}
                     </li>
                     <li>
-                        {{ Html::linkAction('AdminController@get_logout', 'Yeni Kategori Ekle') }}
+                        {{ Html::linkAction('AdminController@get_addCategory', 'Yeni Kategori Ekle') }}
                     </li>
                 </ul>
             </li>
