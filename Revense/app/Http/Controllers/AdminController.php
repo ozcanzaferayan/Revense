@@ -60,7 +60,8 @@ class AdminController extends Controller
     
     public function get_addCategory()
     {
-        $categories = Category::all();
+        $categories = Category::lists('trName', 'id');
+        $categories->prepend('Yok', '-1');
         
         return View::make('admin.categories.add')->with('categories', $categories);
     }
@@ -69,8 +70,42 @@ class AdminController extends Controller
     {
         $category = new Category;
         
-        $category->name = Translation::createNew(Input::get('trName'), Input::get('enName'));
-        $category->slug = Translation::createNew(Input::get('trSlug'), Input::get('enSlug'));
+        $category->trName = Input::get('trName');
+        $category->enName = Input::get('enName');
+        $category->trSlug = Input::get('trSlug');
+        $category->enSlug = Input::get('enSlug');
+        $category->trDescription = Input::get('trDescription');
+        $category->enDescription = Input::get('enDescription');
+        $category->modelName = Input::get('modelName');
+        
+        if(Input::get('parentCategory') != '-1')
+            $category->parentCategory = Input::get('parentCategory');
+        
+        $category->save();
+        
+        return Redirect::action('AdminController@get_categories');
+    }
+    
+    public function get_editCategory($id)
+    {
+        $categories = Category::lists('trName', 'id');
+        $categories->prepend('Yok', '-1');
+        $category = Category::where('id', '=', $id)->first();
+        
+        return View::make('admin.categories.edit')->with('categories', $categories)
+                                                  ->with('category', $category);
+    }
+    
+    public function post_editCategory($id)
+    {
+        $category = Category::where('id', '=', $id)->first();
+        
+        $category->trName = Input::get('trName');
+        $category->enName = Input::get('enName');
+        $category->trSlug = Input::get('trSlug');
+        $category->enSlug = Input::get('enSlug');
+        $category->trDescription = Input::get('trDescription');
+        $category->enDescription = Input::get('enDescription');
         $category->modelName = Input::get('modelName');
         
         if(Input::get('parentCategory') != '-1')

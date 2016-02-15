@@ -2,12 +2,12 @@
 
 @section('content')
     <h2>Tüm Kategoriler</h2>
-
-    @foreach($categories as $category)
-        <ul class="contentList">
+    <ul class="contentList">
+        @foreach($categories as $category)
             <li>
-                <span class="contentName">{{ $category->nameTranslation->trValue }}</span>
+                <span class="contentName">{{ $category->trName }}</span>
+                <a href="{{ action('AdminController@get_editCategory', array('id' => $category->id)) }}" class="editButton"></a>
             </li>
-        </ul>
-    @endforeach
+        @endforeach
+    </ul>
 @endsection

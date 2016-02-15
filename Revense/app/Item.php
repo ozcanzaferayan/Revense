@@ -15,16 +15,6 @@ class Item extends Model
         return $this->belongsTo('App\Category');
     }
     
-    public function nameTranslation()
-    {
-        return $this->hasOne('App\Translation', 'translationKey', 'name');
-    }
-    
-    public function slugTranslation()
-    {
-        return $this->hasOne('App\Translation', 'translationKey', 'slug');
-    }
-    
     public function comments()
     {
         return $this->hasMany('App\Comment', 'item_id', 'id');
@@ -41,11 +31,13 @@ class Item extends Model
     }
     
     public static function getBySlug($slug){
-        $item = Item::whereHas('slugTranslation', function($q) use($slug){
-            $q->where('trValue', $slug); 
-        })->orWhereHas('slugTranslation', function($q) use($slug){
-            $q->where('enValue', $slug); 
-        })->first();
+//        $item = Item::whereHas('slugTranslation', function($q) use($slug){
+//            $q->where('trValue', $slug); 
+//        })->orWhereHas('slugTranslation', function($q) use($slug){
+//            $q->where('enValue', $slug); 
+//        })->first();
+        
+        $item = Item::where('trSlug', '=', $slug)->orWhere('enSlug', '=', $slug)->first();
         
         return $item;
     }

@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Item;
-use App\Translation;
 use App\Category;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Auth;

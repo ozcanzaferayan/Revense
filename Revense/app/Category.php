@@ -6,17 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 
 class Category extends Model
-{
-    public function nameTranslation()
-    {
-        return $this->hasOne('App\Translation', 'translationKey', 'name');
-    }
-    
-    public function slugTranslation()
-    {
-        return $this->hasOne('App\Translation', 'translationKey', 'slug');
-    }
-    
+{   
+    protected $guarded = array('tableName');
     public function items()
     {
         return $this->hasMany('App\Item');
@@ -29,7 +20,6 @@ class Category extends Model
         
         return DB::table('items')
             ->join($model->getTable(), 'items.itemable_id', '=', $model->getTable() . '.id')
-            ->join('translations', 'items.name', '=', 'translations.translationKey')
             ->where('items.category_id', '=', $this->id);
         
 //        $objects = DB::select('select items.*, '. $model->getTable() . '.*, translations.* from items 
@@ -63,11 +53,13 @@ class Category extends Model
     }
     
     public static function getBySlug($slug){
-        $category = Category::whereHas('slugTranslation', function($q) use($slug){
-            $q->where('trValue', $slug); 
-        })->orWhereHas('slugTranslation', function($q) use($slug){
-            $q->where('enValue', $slug); 
-        })->first();
+//        $category = Category::whereHas('slugTranslation', function($q) use($slug){
+//            $q->where('trValue', $slug); 
+//        })->orWhereHas('slugTranslation', function($q) use($slug){
+//            $q->where('enValue', $slug); 
+//        })->first();
+        
+        $category = Category::where('trSlug', '=', $slug)->orWhere('enSlug', '=', $slug)->first();
         
         return $category;
     }

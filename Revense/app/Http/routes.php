@@ -78,11 +78,11 @@ Route::group(['middleware' => 'web'], function () {
                ['as' => 'adminLogin', 
                 'uses' => 'AdminController@get_login']);
     
-    Route::get('admin', 'AdminController@get_index')->middleware('isAdmin');
-    
     Route::post('admin/login', 
                ['as' => 'adminLoginSubmit', 
-                'uses' => 'AdminController@post_login'])->middleware('isAdmin');
+                'uses' => 'AdminController@post_login']);
+    
+    Route::get('admin', 'AdminController@get_index')->middleware('isAdmin');
     
     Route::get('admin/logout', 
                ['as' => 'adminLogout', 
@@ -99,4 +99,12 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('admin/categories/add', 
                ['as' => 'adminAddCategory', 
                 'uses' => 'AdminController@post_addCategory'])->middleware('isAdmin');
+    
+    Route::get('admin/categories/edit/{id}', 
+               ['as' => 'adminEditCategory', 
+                'uses' => 'AdminController@get_editCategory'])->middleware('isAdmin');
+    
+    Route::post('admin/categories/edit/{id}', 
+               ['as' => 'adminEditCategory', 
+                'uses' => 'AdminController@post_editCategory'])->middleware('isAdmin');
 });
