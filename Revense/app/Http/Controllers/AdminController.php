@@ -11,6 +11,7 @@ use Illuminate\Html\FormFacade;
 use View;
 use Redirect;
 use App\Category;
+use App\Translation;
 use Illuminate\Support\Facades\Input;
 
 class AdminController extends Controller
@@ -62,5 +63,21 @@ class AdminController extends Controller
         $categories = Category::all();
         
         return View::make('admin.categories.add')->with('categories', $categories);
+    }
+    
+    public function post_addCategory()
+    {
+        $category = new Category;
+        
+        $category->name = Translation::createNew(Input::get('trName'), Input::get('enName'));
+        $category->slug = Translation::createNew(Input::get('trSlug'), Input::get('enSlug'));
+        $category->modelName = Input::get('modelName');
+        
+        if(Input::get('parentCategory') != '-1')
+            $category->parentCategory = Input::get('parentCategory');
+        
+        $category->save();
+        
+        return Redirect::action('AdminController@get_categories');
     }
 }

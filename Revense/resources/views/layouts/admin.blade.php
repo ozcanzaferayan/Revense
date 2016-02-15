@@ -29,5 +29,7 @@
     <div id="adminRightContent">
         @yield('content')
     </div>
+    <script type="text/javascript" src="{!! URL::asset('scripts/jquery-2.2.0.min.js') !!}"></script>
+    <script type="text/javascript" src="{!! URL::asset('scripts/main.min.js') !!}"></script>
 </body>
 </html>

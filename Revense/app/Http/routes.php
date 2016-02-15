@@ -95,4 +95,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('admin/categories/add', 
                ['as' => 'adminAddCategory', 
                 'uses' => 'AdminController@get_addCategory'])->middleware('isAdmin');
+    
+    Route::post('admin/categories/add', 
+               ['as' => 'adminAddCategory', 
+                'uses' => 'AdminController@post_addCategory'])->middleware('isAdmin');
 });
