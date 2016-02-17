@@ -1,0 +1,9 @@
+Options +FollowSymLinks
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-l
+
+#RewriteRule ^kategoriler/(.+)$ index.php?pg=kategoriler/all/$1 [QSA]
+RewriteRule ^(.+)$ index.php?pg=$1 [QSA,L]
