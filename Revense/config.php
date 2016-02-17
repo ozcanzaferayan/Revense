@@ -3,6 +3,7 @@
 define('SITE_TITLE', 'Revense');
 define('DEFAULT_CONTROLLER', 'Main');
 define('DEFAULT_ACTION', 'index');
+define('DEFAULT_LAYOUT', 'main');
 
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');

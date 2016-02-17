@@ -1,9 +1,16 @@
-Options +FollowSymLinks
-RewriteEngine On
-
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-l
-
-#RewriteRule ^kategoriler/(.+)$ index.php?pg=kategoriler/all/$1 [QSA]
+<IfModule mod_rewrite.c>
+
+Options +FollowSymLinks
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-l
+
+RewriteRule ^kategoriler/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/?$ index.php?pg=main/getItems/$1/$2 [QSA]
+RewriteRule ^kategoriler/([a-zA-Z0-9_-]+)/?$ index.php?pg=main/index/$1 [QSA]
+
 RewriteRule ^(.+)$ index.php?pg=$1 [QSA,L]
+
+ErrorDocument 404 /app/view/errorPages/404.html
+ErrorDocument 500 /app/view/errorPages/500.html
