@@ -2,16 +2,21 @@
 
 class Main extends Controller
 {
-    function index($mainCategorySlug)
+    function index($test)
     {
-        echo $mainCategorySlug;
+        echo $test;
         
         $this->view->load('index/index');
     }
     
+    function index2()
+    {
+        $this->view->load('index/index2');
+    }
+    
     function getItems($parameters)
     {
-        print_r($mainCategorySlug);
+//        print_r($mainCategorySlug);
         
 //        echo $mainCategorySlug . ' - ' . $subCategorySlug;
     }

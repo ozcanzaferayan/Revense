@@ -4,57 +4,64 @@ class Application {
     function __construct() {
         try
         {
+            global $routeCollection;
+            
             $pg = isset($_GET['pg']) ? $_GET['pg'] : null;
             $pg = rtrim($pg, '/');
             $pg = explode('/', $pg);
-
-            print_r($pg);
             
-            if(empty($pg[0]))
+            foreach($routeCollection->routes as $route)
             {
-                $defaultController = constant('DEFAULT_CONTROLLER');
-                $defaultAction = constant('DEFAULT_ACTION');
-                require_once 'app/controller/' . $defaultController . '.php';
-                $controller = new $defaultController();
-                $controller->$defaultAction();
-                return FALSE;
-            }   
-
-            $file = 'app/controller/' . $pg[0] . '.php';
-
-            if (file_exists($file))
-                require_once $file;
-
-            $pg[0] = str_replace('-', '', $pg[0]);
-            
-            if(!class_exists($pg[0]))
-            {
-                Logger::error('App.php - Given class not found: ' . $pg[0]);
-                return;
-            }
-            
-            $controller = new $pg[0];
-
-            if (isset($pg[4]))
-                $controller->{$pg[1]}(array($pg[2], $pg[3], $pg[4]));
-            else
-            {
-                if (isset($pg[3]))
+                $pattern = ltrim(rtrim($route->pattern, '/'), '/');
+                $pattern = explode('/', $pattern);
+                $routeDifference = array_diff($pattern, $pg);
+                
+                if(count($routeDifference) === 0 || (strpos(array_values($routeDifference)[0], '}') !== false)) // match
                 {
-                    Logger::info('TEST');
-                    $controller->{$pg[1]}(array($pg[2], $pg[3]));
-                }
-                else
-                {
-                    if (isset($pg[2]))
-                        $controller->{$pg[1]}($pg[2]);
-                    else
-                    {
-                        if (isset($pg[1]))
-                            $controller->{$pg[1]}();
-                        else
-                            $controller->index();
+                    if($_SERVER['REQUEST_METHOD'] != $route->method){
+                        header("HTTP/1.0 404 Not Found");
+                        die();
                     }
+                    
+                    if(isset($route->action['Controller'])){
+                        $temp = explode('@', $route->action['Controller']);
+                        $file = 'app/controller/' . $temp[0] . '.php';
+                        
+                        if (file_exists($file))
+                            require_once $file;
+                        
+                        $controller = new $temp[0];
+                        $parameterKey = '';
+                        $parameterValue = '';
+                        
+                        if(count($routeDifference) === 1)
+                        {
+                            if(strpos(array_values($routeDifference)[0], '}') !== false){
+                                $parameterKey = ltrim(rtrim(array_values($routeDifference)[0], '}'), '{');
+
+                                if($route->method === 'POST')
+                                    $parameterValue = $_POST[$parameterKey];
+                                else
+                                    $parameterValue = $_GET[$parameterKey];
+                            }
+                        }
+                        
+                        if(isset($temp[1]))
+                            $controller->{$temp[1]}($parameterValue);
+                        else
+                            $controller->index($parameterValue);
+                    }
+                    else if(isset($route->action['View'])){
+                        $layout = 'default';
+                        
+                        if(isset($route->action['Layout']))
+                            $layout = $route->action['Layout'];
+                        
+                        $view = new View;
+                        $view->load($route->action['View'], $layout);
+                    }
+                    
+                    break;
                 }
             }
         }
@@ -63,7 +70,6 @@ class Application {
             
         }
     }
-
 }
 
 ?>

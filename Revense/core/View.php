@@ -23,6 +23,5 @@ class View {
         if($layout != null)
             require_once $_SERVER['DOCUMENT_ROOT'] . '/app/view/layout/' . $layout . '/footer.php';
     }
-
 }
 ?>
