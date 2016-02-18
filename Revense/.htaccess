@@ -7,8 +7,8 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-l
 
-RewriteRule ^kategoriler/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/?$ index.php?pg=main/getItems/$1/$2 [QSA]
-RewriteRule ^kategoriler/([a-zA-Z0-9_-]+)/?$ index.php?pg=main/index/$1 [QSA]
+#RewriteRule ^kategoriler/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/?$ index.php?pg=main/getItems/$1/$2 [QSA]
+#RewriteRule ^kategoriler/([a-zA-Z0-9_-]+)/?$ index.php?pg=main/index/$1 [QSA]
 
 RewriteRule ^(.+)$ index.php?pg=$1 [QSA,L]
 

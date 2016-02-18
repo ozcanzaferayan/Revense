@@ -14,10 +14,18 @@ class Application {
             {
                 $pattern = ltrim(rtrim($route->pattern, '/'), '/');
                 $pattern = explode('/', $pattern);
-                $routeDifference = array_diff($pattern, $pg);
+                $routeDifference = array_diff($pg, $pattern);
+                $routeDifference2 = array_diff($pattern, $pg);
                 
-                if(count($routeDifference) === 0 || (strpos(array_values($routeDifference)[0], '}') !== false)) // match
+//                print_r($routeDifference);
+//                print '---------------------';
+//                print_r($routeDifference2);
+                
+                if(count($routeDifference) === 0 && count($routeDifference2) === 0 
+                   || (count($routeDifference2) > 0 && strpos(array_values($routeDifference2)[0], '}') !== false)) // match
                 {
+                    print_r($route);
+                    
                     if($_SERVER['REQUEST_METHOD'] != $route->method){
                         header("HTTP/1.0 404 Not Found");
                         die();
@@ -31,25 +39,36 @@ class Application {
                             require_once $file;
                         
                         $controller = new $temp[0];
-                        $parameterKey = '';
-                        $parameterValue = '';
+                        $parameters = array();
                         
-                        if(count($routeDifference) === 1)
+                        foreach($routeDifference as $parameterKey)
                         {
-                            if(strpos(array_values($routeDifference)[0], '}') !== false){
-                                $parameterKey = ltrim(rtrim(array_values($routeDifference)[0], '}'), '{');
-
-                                if($route->method === 'POST')
-                                    $parameterValue = $_POST[$parameterKey];
-                                else
-                                    $parameterValue = $_GET[$parameterKey];
+                            $key = ltrim(rtrim($parameterKey, '}'), '{');
+                            
+                            if($route->method === 'POST')
+                            {
+                                if(!isset($_POST[$key])){
+                                    header("HTTP/1.0 404 Not Found");
+                                    die();
+                                }
+                                
+                                $parameters[] = $_POST[$key];
+                            }
+                            else if($route->method === 'GET')
+                            {
+                                if(!isset($_GET[$key])){
+                                    header("HTTP/1.0 404 Not Found");
+                                    die();
+                                }
+                                
+                                $parameters[] = $_GET[$key];
                             }
                         }
                         
                         if(isset($temp[1]))
-                            $controller->{$temp[1]}($parameterValue);
+                            call_user_func_array(array($controller, $temp[1]), $parameters);
                         else
-                            $controller->index($parameterValue);
+                            call_user_func_array(array($controller, 'index'), $parameters);
                     }
                     else if(isset($route->action['View'])){
                         $layout = 'default';
