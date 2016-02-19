@@ -1,7 +1,7 @@
 <?php
 
 define('SITE_TITLE', 'Revense');
-define('DEFAULT_CONTROLLER', 'Main');
+define('DEFAULT_CONTROLLER', 'MainController');
 define('DEFAULT_ACTION', 'index2');
 define('DEFAULT_LAYOUT', 'main');
 

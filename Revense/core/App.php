@@ -14,7 +14,6 @@ class Application {
             if(strlen($page) === 0) // load default controller
             {
                 $defaultController = constant('DEFAULT_CONTROLLER');
-                $defaultControllerClassName = $defaultController . 'Controller';
                 $defaultAction = constant('DEFAULT_ACTION');
                 
                 $file = 'app/controller/' . $defaultController . '.php';
@@ -22,7 +21,7 @@ class Application {
                 if (file_exists($file))
                     require_once $file;
                 
-                $controller = new $defaultControllerClassName;
+                $controller = new $defaultController;
                 call_user_func_array(array($controller, $defaultAction), array());
                 return;
             }
@@ -77,8 +76,7 @@ class Application {
         if (file_exists($file))
             require_once $file;
 
-        $controllerClassName = $controllerAndAction[0] . 'Controller';
-        $controller = new $controllerClassName;
+        $controller = new $controllerAndAction[0];
 
         if(isset($controllerAndAction[1]))
             call_user_func_array(array($controller, $controllerAndAction[1]), $parameters);

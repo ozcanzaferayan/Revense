@@ -1,6 +1,5 @@
 <?php
 
-require_once 'app/model/test.php';
 //require_once 'app/model/user.php';
 
 class MainController extends Controller
@@ -9,7 +8,7 @@ class MainController extends Controller
     {
         echo $test2 . '<br>' . $test3;
         
-        $this->view->isLoggedIn = User::isLoggedIn();
+//        $this->view->isLoggedIn = User::isLoggedIn();
 //        $model = new TestModel;
         
 //        $model->test();
