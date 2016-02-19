@@ -1,13 +1,15 @@
 <?php
 
 require_once 'app/model/test.php';
+//require_once 'app/model/user.php';
 
-class Main extends Controller
+class MainController extends Controller
 {
     function index($test2, $test3)
     {
         echo $test2 . '<br>' . $test3;
         
+        $this->view->isLoggedIn = User::isLoggedIn();
 //        $model = new TestModel;
         
 //        $model->test();
@@ -17,6 +19,7 @@ class Main extends Controller
     
     function index2()
     {
+//        phpinfo();
         $this->view->load('index/index2');
     }
     
