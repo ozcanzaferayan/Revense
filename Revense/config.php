@@ -2,7 +2,7 @@
 
 define('SITE_TITLE', 'Revense');
 define('DEFAULT_CONTROLLER', 'Main');
-define('DEFAULT_ACTION', 'index');
+define('DEFAULT_ACTION', 'index2');
 define('DEFAULT_LAYOUT', 'main');
 
 define('DB_HOST', '188.121.44.188');

@@ -6,81 +6,55 @@ class Application {
         {
             global $routeCollection;
             
-            $page = isset($_GET['pg']) ? $_GET['pg'] : null;
+            $page = (isset($_GET['pg']) ? $_GET['pg'] : '');
             $pg = rtrim($page, '/');
             $pg = explode('/', $pg);
             $routeMatch = FALSE;
             
+            if(strlen($page) === 0) // load default controller
+            {
+                $defaultController = constant('DEFAULT_CONTROLLER');
+                $defaultAction = constant('DEFAULT_ACTION');
+                
+                $file = 'app/controller/' . $defaultController . '.php';
+
+                if (file_exists($file))
+                    require_once $file;
+                
+                $controller = new $defaultController;
+                call_user_func_array(array($controller, $defaultAction), array());
+                return;
+            }
+            
             foreach($routeCollection->routes as $route)
             {
-                if(ltrim(rtrim($page, '/'), '/') == ltrim(rtrim($route->pattern, '/'), '/') 
-                   || preg_match('/' . preg_replace('/\//i', '\\/', rtrim($page, '/')) . '\/{.+}/i', $route->pattern) == 1)
+                $temp1 = preg_replace('/{.+?}/i', '(.+)', ltrim(rtrim($route->pattern, '/'), '/'));
+                $temp2 = preg_replace('/\//i', '\\/', $temp1);
+                
+                if(preg_match_all('/' . $temp2 . '$/i', ltrim(rtrim($page, '/'), '/')))
                 {
-                    $parameters = array();
+                    if($_SERVER['REQUEST_METHOD'] != $route->method)
+                        continue;
                     
-                    if(preg_match('/{.+}/i', $route->pattern) == 1)
+                    $parameters = array();
+                    $counter = 0;
+                    preg_match_all('/' . $temp2 . '$/i', ltrim(rtrim($page, '/'), '/'), $matches);
+                    
+                    foreach($matches as $match)
                     {
-                        $mismatchKeyFound = FALSE;
-                        preg_match_all('/{.+?}/i', $route->pattern, $matches);
-                        
-                        foreach($matches[0] as $match)
-                        {
-                            $key = rtrim(ltrim($match, '{'), '}');
-                            
-                            if($route->method === 'POST')
-                            {
-                                if(!isset($_POST[$key])){ $mismatchKeyFound = TRUE; break; }
-                                
-                                $parameters[] = $_POST[$key];
-                            }
-                            else if($route->method === 'GET')
-                            {
-                                if(!isset($_GET[$key])){ $mismatchKeyFound = TRUE; break; }
-                                
-                                $parameters[] = $_GET[$key];
-                            }
-                            else if($route->method === 'PUT')
-                            {
-                                parse_str(file_get_contents("php://input"),$putVars);
-                                
-                                if(!isset($putVars[$key])){ $mismatchKeyFound = TRUE; break; }
-                                
-                                $parameters[] = $putVars[$key];
-                            }
-                            else if($route->method === 'DELETE')
-                            {
-                                parse_str(file_get_contents("php://input"),$deleteVars);
-                                
-                                if(!isset($deleteVars[$key])){ $mismatchKeyFound = TRUE; break; }
-                                
-                                $parameters[] = $deleteVars[$key];
-                            }
-                        }
-                        
-                        if($_SERVER['REQUEST_METHOD'] != $route->method || $mismatchKeyFound)
+                        if(++$counter == 1)
                             continue;
                         
-                        if(isset($route->action['Controller']))
-                            $this->loadControllerAction($route->action['Controller'], $parameters);
-                        else if(isset($route->action['View']))
-                            $this->loadView($route);
-                        
-                        $routeMatch = TRUE;
-                        break;
+                        $parameters[] = $match[0];  
                     }
-                    else
-                    {
-                        if($_SERVER['REQUEST_METHOD'] != $route->method)
-                            continue;
-                        
-                        if(isset($route->action['Controller']))
-                            $this->loadControllerAction($route->action['Controller'], $parameters);
-                        else if(isset($route->action['View']))
-                            $this->loadView($route);
-                        
-                        $routeMatch = TRUE;
-                        break;
-                    }
+                                      
+                    if(isset($route->action['Controller']))
+                        $this->loadControllerAction($route->action['Controller'], $parameters);
+                    else if(isset($route->action['View']))
+                        $this->loadView($route);
+                    
+                    $routeMatch = TRUE;
+                    break;
                 }
             }
             

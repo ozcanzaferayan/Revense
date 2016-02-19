@@ -7,6 +7,7 @@ class Main extends Controller
     function index($test2, $test3)
     {
         echo $test2 . '<br>' . $test3;
+        
 //        $model = new TestModel;
         
 //        $model->test();
